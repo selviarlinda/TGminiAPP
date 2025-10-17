@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /home/admi/projects/TGminiAPP/telegram-crypto-app/venv
+set -gx VIRTUAL_ENV /home/admi/projects/TGminiAPP/venv
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH

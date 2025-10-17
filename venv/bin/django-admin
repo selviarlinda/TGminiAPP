@@ -1,4 +1,4 @@
-#!/home/admi/projects/TGminiAPP/telegram-crypto-app/venv/bin/python3
+#!/home/admi/projects/TGminiAPP/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
