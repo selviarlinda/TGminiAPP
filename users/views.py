@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from django.shortcuts import render
 from .models import CustomUser
 from .serializers import UserRegistrationSerializer, BalanceSerializer
 from rest_framework.permissions import AllowAny
@@ -65,3 +66,9 @@ class AddPointsView(APIView):
         user.balance += points
         user.save()
         return Response({'message': f'{points} баллов успешно добавлено!'}, status=status.HTTP_200_OK)
+
+def register_page(request):
+    """
+    Отображение HTML-страницы регистрации.
+    """
+    return render(request, 'users/register.html')
