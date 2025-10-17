@@ -7,7 +7,17 @@ from .serializers import UserRegistrationSerializer, BalanceSerializer
 from rest_framework.permissions import AllowAny
 
 class RegisterView(APIView):
+    """
+    Конечная точка для регистрации нового пользователя.
+    Методы:
+    - GET: возвращает приветственное сообщение.
+    - POST: создает нового пользователя.
+    """
     permission_classes = [AllowAny]
+
+    def get(self, request):
+        return Response({'message': 'Добро пожаловать на страницу регистрации!'}, status=status.HTTP_200_OK)
+
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
@@ -16,27 +26,42 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CheckBalanceView(APIView):
+    """
+    Конечная точка для проверки баланса пользователя.
+    Метод:
+    - GET: возвращает текущий баланс аутентифицированного пользователя.
+    """
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user = request.user
+        if not user:
+            return Response({'error': 'Пользователь не найден.'}, status=status.HTTP_404_NOT_FOUND)
         serializer = BalanceSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AddPointsView(APIView):
+    """
+    Конечная точка для добавления баллов пользователю.
+    Метод:
+    - POST: добавляет указанное количество баллов к текущему балансу пользователя.
+    """
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         points = request.data.get('points')
         if not points:
             return Response({'error': 'Необходимо указать количество баллов.'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         try:
             points = float(points)
         except ValueError:
             return Response({'error': 'Баллы должны быть числом.'}, status=status.HTTP_400_BAD_REQUEST)
 
         user = request.user
+        if user.balance is None:
+            return Response({'error': 'Баланс пользователя не установлен.'}, status=status.HTTP_400_BAD_REQUEST)
+
         user.balance += points
         user.save()
         return Response({'message': f'{points} баллов успешно добавлено!'}, status=status.HTTP_200_OK)

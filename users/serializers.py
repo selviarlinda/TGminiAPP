@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.hashers import make_password
 from .models import CustomUser
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -8,11 +9,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-        )
+        validated_data['password'] = make_password(validated_data['password'])
+        user = CustomUser.objects.create(**validated_data)
         return user
 
 class BalanceSerializer(serializers.ModelSerializer):
