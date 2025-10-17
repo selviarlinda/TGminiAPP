@@ -4,8 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import CustomUser
 from .serializers import UserRegistrationSerializer, BalanceSerializer
+from rest_framework.permissions import AllowAny
 
 class RegisterView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
