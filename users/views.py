@@ -6,6 +6,9 @@ from django.shortcuts import render
 from .models import CustomUser
 from .serializers import UserRegistrationSerializer, BalanceSerializer
 from rest_framework.permissions import AllowAny
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 class RegisterView(APIView):
     """
@@ -72,3 +75,22 @@ def register_page(request):
     Отображение HTML-страницы регистрации.
     """
     return render(request, 'users/register.html')
+    
+    
+
+@csrf_exempt
+def send_data(request):
+    """
+    Получение данных от Telegram MiniApp.
+    """
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+        username = data.get('username')
+
+        # Логика обработки данных (например, сохранение в БД)
+        print(f"Получены данные от пользователя {username} с ID {user_id}")
+
+        return JsonResponse({'status': 'success', 'message': 'Данные успешно обработаны!'})
+
+    return JsonResponse({'status': 'error', 'message': 'Метод не поддерживается.'}, status=400)

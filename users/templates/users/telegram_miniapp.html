@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram MiniApp</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h1>Добро пожаловать в Telegram MiniApp</h1>
+    <p id="user-info">Загрузка данных пользователя...</p>
+    <button id="send-data">Отправить данные</button>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+
+        // Отобразить имя пользователя Telegram
+        document.getElementById("user-info").innerText = `Привет, ${tg.initDataUnsafe.user.first_name}!`;
+
+        // Основная кнопка
+        tg.MainButton.text = "Отправить данные";
+        tg.MainButton.show();
+
+        // Событие нажатия кнопки
+        tg.MainButton.onClick(() => {
+            fetch('/api/users/send-data/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: tg.initDataUnsafe.user.id,
+                    username: tg.initDataUnsafe.user.username
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Данные успешно отправлены!");
+                console.log(data);
+            })
+            .catch(error => console.error("Ошибка:", error));
+        });
+    </script>
+</body>
+</html>
