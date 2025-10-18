@@ -1,0 +1,8 @@
+.App { text-align: center; background-color: #282c34; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: calc(10px + 2vmin); color: white; }
+.user-info { margin: 20px; padding: 10px; border: 1px solid #61dafb; border-radius: 8px; }
+button { background-color: #61dafb; border: none; padding: 10px 20px; border-radius: 5px; font-size: 1em; cursor: pointer; margin-top: 20px; }
+button:disabled { background-color: #ccc; cursor: not-allowed; }
+.validation-result { margin-top: 20px; width: 80%; }
+pre { background-color: #333; padding: 15px; border-radius: 5px; text-align: left; font-size: 0.8em; white-space: pre-wrap; word-break: break-all; }
+.success { border: 1px solid #4CAF50; color: #4CAF50; }
+.error { border: 1px solid #f44336; color: #f44336; }

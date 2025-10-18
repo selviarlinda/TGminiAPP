@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:14-alpine
+    container_name: tma_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - tma_network
+
+  backend:
+    build: ./backend
+    container_name: tma_backend
+    restart: always
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB}
+    depends_on:
+      - db
+    networks:
+      - tma_network
+
+  nginx:
+    container_name: tma_nginx
+    build:
+      context: . # Контекст теперь - весь проект, чтобы Dockerfile мог видеть папку frontend
+      dockerfile: ./nginx/Dockerfile # Указываем путь к нашему мульти-стадийному Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl
+    networks:
+      - tma_network
+
+volumes:
+  postgres_data:
+  # Том frontend_build больше не нужен
+
+networks:
+  tma_network:
+    driver: bridge
