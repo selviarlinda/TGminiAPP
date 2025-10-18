@@ -31,8 +31,10 @@ services:
   nginx:
     container_name: tma_nginx
     build:
-      context: . # Контекст теперь - весь проект, чтобы Dockerfile мог видеть папку frontend
-      dockerfile: ./nginx/Dockerfile # Указываем путь к нашему мульти-стадийному Dockerfile
+      # КОНТЕКСТ - ВЕСЬ ПРОЕКТ. ЭТО ПРАВИЛЬНО.
+      context: .
+      # УКАЗЫВАЕМ ПУТЬ К DOCKERFILE ОТНОСИТЕЛЬНО КОНТЕКСТА
+      dockerfile: ./nginx/Dockerfile
     ports:
       - "80:80"
       - "443:443"
@@ -45,7 +47,6 @@ services:
 
 volumes:
   postgres_data:
-  # Том frontend_build больше не нужен
 
 networks:
   tma_network:

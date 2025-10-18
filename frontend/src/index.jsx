@@ -1,15 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { WebAppProvider } from '@twa-dev/sdk/react';
+import App from './App';
 import './index.css';
-// ИЗМЕНЯЕМ ИМПОРТ, ЧТОБЫ УКАЗАТЬ НА ПРАВИЛЬНЫЙ ФАЙЛ .jsx
-import App from './App.jsx';
 
+// Код инициализации React должен быть здесь, а не внутри компонента
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <WebAppProvider>
-      <App />
-    </WebAppProvider>
+    <App />
   </React.StrictMode>
 );
